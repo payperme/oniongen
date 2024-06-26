@@ -6,7 +6,8 @@ def urlGenerator():
 
     alphabet = 'abcdefghijklmnopqrstuvwxyz234567'
     rand_string = ''.join(secrets.choice(alphabet) for _ in range(56))
-    onion_url = 'http://' + rand_string + '.onion' 
+    onion_url = 'http://' + rand_string + '.onion'
+    print(f"Triying: {onion_url}")
     return onion_url
 
 def listUrl(onion):
@@ -22,8 +23,13 @@ def checkOnline(url):
         r = requests.get(url, proxies=torNet, timeout=30)
         if r.status_code == 200:
             listUrl(url)
+        else:
+            print(r.status_code)
     except requests.exceptions.RequestException as e:
-        print(f"Error checking {url}: {e}")
+        if "SOCKSHTTPConnectionPool" in str(e):
+            print('not lucky')
+        else:
+            print(f"{e}")
 
 if __name__ == "__main__":
     while True:
